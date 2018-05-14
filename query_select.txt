@@ -1,0 +1,4 @@
+1.
+select candidate.name, candidate.location, candidate.grade_current, sum(candidate.grade_current) from candidate inner join voter_candidate
+on candidate.id = voter_candidate.candidate_id
+ where grade_current < 9 group by grade_current
