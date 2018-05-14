@@ -11,6 +11,7 @@ const query1 = `SELECT
                 WHERE politicians.grade_current < 9
                 GROUP BY 1
                 ORDER BY 4 ASC;`;
+                
 db.all(query1, (err, output) => {
   if (err) throw err;
   console.log('\nQuery1\'sOutputs: \n');
@@ -31,6 +32,8 @@ const query2 = `SELECT
                   INNER JOIN votes
                   ON politicians.id = votes.politician_id
                   GROUP BY 1
+                  ORDER BY 3 DESC
+                  LIMIT 3
                   ) AS politicians_detail
                 INNER JOIN (
                   SELECT 
@@ -42,7 +45,7 @@ const query2 = `SELECT
                   ON voters.id = votes.voter_id
                   ) AS votes_detail
                 ON politicians_detail.id = votes_detail.politician_id
-                ORDER BY 1 DESC;`;
+                ORDER BY 1 DESC, 2 ASC;`;
 
 db.all(query2, (err, output) => {
   if (err) throw err;
