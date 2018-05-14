@@ -26,7 +26,6 @@ JOIN votes ON votes.voter_id = voters.voter_id
 GROUP BY name
 ORDER BY COUNT(*) DESC;`
 
-
 let arr = [query1, query2, query3];
 
 for(let i = 0; i < arr.length; i++){
