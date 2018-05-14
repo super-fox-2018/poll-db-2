@@ -1,0 +1,60 @@
+/*1. Berapa banyak vote yang diterima Politicians yg memiliki
+grade di bawah 9? Tampilkan nama politician, lokasi, grade_current,
+dan jumlah vote-nya. Urutkan berdasarkan grade yang paling kecil.
+*/
+
+SELECT politicians.name, 
+politicians.location,
+politicians.grade_current, 
+COUNT (votes.politicianId) AS totalVote 
+FROM politicians
+JOIN votes
+ON politicians.id = votes.politicianId
+WHERE politicians.grade_current < 9
+GROUP BY 1
+ORDER BY totalVote ASC;
+
+/* 2. Tampilkan 3 politicians yang memiliki vote terbanyak dan siapa saja
+yg memilih politician tsb. List nama politician, total vote,
+full_name voter, dan gender voternya.
+*/
+
+SELECT politicians_detail.totalVote,
+politicians_detail.politicianName,
+votes_detail.voterName,
+votes_detail.gender
+FROM (
+  SELECT politicians.id AS politician_id,
+  COUNT(votes.politicianId) AS totalVote,
+  politicians.name AS politicianName
+  FROM votes
+  JOIN politicians
+  ON votes.politicianId = politicians.id
+  GROUP BY 3
+  ORDER BY totalVote DESC
+  LIMIT 3
+) AS politicians_detail
+JOIN (
+	SELECT (voters.first_name || " " || voters.last_name) AS voterName,
+	voters.gender,
+	votes.politicianId
+	FROM voters
+	JOIN votes
+	ON voters.id = votes.voter_id
+) AS votes_detail
+ON politician_id = votes_detail.politicianId;
+
+
+/*3.*/
+
+SELECT COUNT(*) AS totalVote,
+(voters.first_name || ' ' || voters.last_name) AS name,
+voters.gender,
+voters.age
+FROM voters
+JOIN votes
+ON voters.id = votes.voterId
+GROUP BY name,
+HAVING totalVote > 1
+ORDER BY totalVote DESC;
+
